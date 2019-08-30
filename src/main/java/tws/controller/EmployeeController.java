@@ -8,9 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import tws.dto.employeeDto;
 import tws.entity.Employee;
 import tws.repository.EmployeeMapper;
+import tws.service.EmployeesService;
 
 import java.net.URI;
 import java.util.List;
@@ -22,6 +26,33 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeMapper employeeMapper;
+    @Autowired
+    private EmployeesService EmployeesService;
+    
+    @GetMapping("")
+    public ResponseEntity<List<Employee>> getAll(
+    	@RequestParam(required = false) int page,
+    	@RequestParam(required = false) int pageSize
+    	){
+        return ResponseEntity.ok(employeeMapper.selectAll(page,pageSize));
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<employeeDto>selectById(@PathVariable String id){
+    	Employee employee = employeeMapper.selectById(id);
+    	employeeDto employeeDto = new employeeDto();
+    	employeeDto.setId(employee.getId());
+    	employeeDto.setName(employee.getName());
+    	employeeDto.setAge(employee.getAge());
+    	
+    	String desc = String.format("name:%s,"name:%s","
+    			employee.getName(),
+    			employee.getAge(),
+    			);
+    	employeeDto.setDesc(desc);
+    	return ResponseEnity.ok(employeeDto);
+    }
+    
 
     @GetMapping("")
     public ResponseEntity<List<Employee>> getAll() {
@@ -53,5 +84,9 @@ public class EmployeeController {
     }
     
     
+    
+    
 
+    
+    
 }

@@ -5,6 +5,15 @@
         select * from `employee`;
     </select>
     
+    <select id="selectAll" resultType="tws.entity.Employee">
+        select * from `employee` 
+        <if test="keyword!"=null>
+        <bind name="pattern" value="'%'+keyword+'%'"/>
+        where `name` like #{pattern}
+        </if>
+    </select>
+    
+    
     <insert id="insert">
     insert into `employee` (`id`,`name`,`age`)
     values(#{employee.id},#{employee.name},#{employee.age})
